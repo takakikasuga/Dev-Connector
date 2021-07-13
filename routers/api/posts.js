@@ -1,91 +1,42 @@
 const express = require('express');
 const router = express.Router();
-const gravatar = require('gravatar');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+// const gravatar = require('gravatar');
+// const bcrypt = require('bcryptjs');
+// const jwt = require('jsonwebtoken');
 const config = require('config');
 const { body, validationResult } = require('express-validator');
 const User = require('../../models/User');
+const Profile = require('../../models/Profile');
+const Post = require('../../models/Post');
+
+const auth = require('../../middleware/auth');
 
 // @route     POST api/posts
-// @desc      Register User
-// @access    Public
+// @desc      Create a post
+// @access    Private
+
 router.post(
   '/',
-  [
-    // 名前が渡ってきているかどうか（空ではない）
-    body('name', 'Name is required').not().isEmpty(),
-    // password must be at least 5 chars long
-    body('email', 'Please include a valid email address').isEmail(),
-    body(
-      'password',
-      'Please enter a password with 6 or more characters'
-    ).isLength({ min: 6 })
-  ],
+  [auth, body('text', 'Text is required').not().isEmpty()],
   async (req, res) => {
     const errors = validationResult(req);
-    console.log('errors', errors);
-    console.log('errors.isEmpty()', errors.isEmpty());
-    console.log(req.body);
-    if (!errors.isEmpty())
+    if (!errors.isEmpty()) {
       //  errors.array();でエラーの内容をレスポンスする
       return res.status(400).json({ errors: errors.array() });
+    }
 
-    const { name, email, password } = req.body;
     try {
-      // 同じユーザーが既に存在するか否かの確認（既に存在したら登録できないようにする）
-      let user = await User.findOne({ email });
-      if (user) {
-        return res
-          .status(404)
-          .json({ errors: [{ msg: 'User already exists' }] });
-      }
-
-      // ユーザーのアバターを取得する（gravatarモジュール）
-      // s：文字列（String）、r：評価（Rating）、d：標準（ Default）
-      const avatar = gravatar.url(email, {
-        size: '200',
-        rating: 'pg',
-        // mmはデフォルトで画像を差し込んでくれる（ミステリーマン）
-        default: 'mm'
+      const user = await User.findById(req.user.id).select('-password');
+      const newPost = new Post({
+        text: req.body.text,
+        name: user.name,
+        avator: user.avator,
+        user: req.user.id
       });
 
-      // 保存するためのインスタンスを作成
-      user = new User({
-        name,
-        email,
-        avatar,
-        password
-      });
+      const post = await newPost.save();
 
-      // パスワードのハッシュ化
-      // bcrypt.getSalt(10)の10はドキュメントの推奨
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-
-      // DBに保存
-      await user.save();
-
-      console.log('user', user);
-      // jwtを返す
-      const payload = {
-        user: {
-          // _idとしなくてもidでできるようになっている
-          id: user._id
-        }
-      };
-
-      console.log('payload', payload);
-      // 3600;は1時間・jwt.signはトークンを発行する
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        { expiresIn: 36000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
+      res.json({ post });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
