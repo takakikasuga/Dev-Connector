@@ -1,8 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAlert } from '../../actions/alert';
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const alert = useSelector((state) => state.alert);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,6 +23,7 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     if (password !== password2) {
+      dispatch(setAlert("Password don't match", 'danger'));
       console.log("Password don't match");
     } else {
       console.log('Password  match', formData);
