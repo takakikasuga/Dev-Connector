@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const { body, validationResult } = require('express-validator');
 const User = require('../../models/User');
 
@@ -61,12 +63,33 @@ router.post(
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
 
+      // DBに保存
       await user.save();
 
-      res.send('User register');
-    } catch (err) {}
-    console.error(err.message);
-    res.status(500).send('Server error');
+      console.log('user', user);
+      // jwtを返す
+      const payload = {
+        user: {
+          // _idとしなくてもidでできるようになっている
+          id: user._id
+        }
+      };
+
+      console.log('payload', payload);
+      // 3600;は1時間・jwt.signはトークンを発行する
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: 36000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
   }
 );
 
