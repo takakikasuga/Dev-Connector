@@ -14,6 +14,7 @@ module.exports = function (req, res, next) {
     // jwtトークンが今でも有効化を確認する（返り値はペイロード）
     const decoded = jwt.verify(token, config.get('jwtSecret'));
     console.log('decoded', decoded);
+    // req.userの中にはユーザーの一意のIDが入ったオブジェクト格納されている
     req.user = decoded.user;
     next();
   } catch (err) {

@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const ProfileSchema = new mongoose.Schema({
   user: {
-    // ProfileSchemaのデータモデルの一意のID
+    // mongoDBが自動で出力するID出なければいけない
     type: mongoose.Schema.Types.ObjectId,
     // userデータベースを参照する
-    ref: 'user'
+    ref: 'User'
   },
   company: {
     type: String
