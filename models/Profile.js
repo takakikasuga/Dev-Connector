@@ -4,7 +4,7 @@ const ProfileSchema = new mongoose.Schema({
   user: {
     // mongoDBが自動で出力するID出なければいけない
     type: mongoose.Schema.Types.ObjectId,
-    // userデータベースを参照する
+    // userデータベースを参照する（poplatedメソッドを使えるようにする？？）
     ref: 'User'
   },
   company: {
