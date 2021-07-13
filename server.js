@@ -11,6 +11,10 @@ const app = express();
 // mongoDBと接続をする
 connectDB();
 
+// ミドルウェアの初期化
+// falseにすることでリクエストデータをreq.bodyで取得できるようになる。
+app.use(express.json({ extended: false }));
+
 app.get('/', (req, res) => {
   res.send('API Running');
 });
