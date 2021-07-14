@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 const Alert = () => {
   const alerts = useSelector((state) => state.alert);
+  console.log('alerts', alerts);
   return (
     alerts !== null &&
     alerts.length > 0 &&
