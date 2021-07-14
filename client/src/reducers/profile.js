@@ -1,4 +1,4 @@
-import { GET_PROFILE, PROFILE_ERROR } from '../actions/types';
+import { GET_PROFILE, PROFILE_ERROR, CREAR_PROFILE } from '../actions/types';
 
 const initialState = {
   profile: null,
@@ -22,6 +22,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         error: payload,
+        loading: false
+      };
+    case CREAR_PROFILE:
+      console.log('CREAR_PROFILE処理が通過しています。');
+      return {
+        ...state,
+        profile: null,
+        repos: [],
         loading: false
       };
     default:
