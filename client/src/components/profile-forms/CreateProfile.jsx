@@ -1,6 +1,10 @@
 import React, { Fragment, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import { createProfile } from '../../actions/profile';
 
-const CreateProfile = () => {
+const CreateProfile = withRouter(({ history }) => {
+  const dispatch = useDispatch();
   const [formData, setFormDate] = useState({
     company: '',
     website: '',
@@ -36,9 +40,16 @@ const CreateProfile = () => {
   const onChange = (e) => {
     setFormDate({
       ...formData,
-      [e.taget.name]: e.taget.value
+      [e.target.name]: e.target.value
     });
   };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log('history/withRouter', history);
+    dispatch(createProfile(formData, history));
+  };
+
   return (
     <Fragment>
       <h1 className='large text-primary'>Create Your Profile</h1>
@@ -47,7 +58,11 @@ const CreateProfile = () => {
         profile stand out
       </p>
       <small>* = required field</small>
-      <form className='form'>
+      <form
+        className='form'
+        onSubmit={(e) => {
+          onSubmit(e);
+        }}>
         <div className='form-group'>
           <select
             name='status'
@@ -239,5 +254,5 @@ const CreateProfile = () => {
       </form>
     </Fragment>
   );
-};
+});
 export default CreateProfile;
