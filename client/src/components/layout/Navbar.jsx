@@ -1,14 +1,20 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../actions/auth';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const loading = useSelector((state) => state.auth.loading);
   const authLinks = (
     <ul>
       <li>
-        <a href='#!'>
+        <a
+          onClick={() => {
+            dispatch(logout());
+          }}
+          href='#!'>
           <i className='fas fa-sign-out-alt'></i>
           <span className='hide-sm'>Logout</span>
         </a>
