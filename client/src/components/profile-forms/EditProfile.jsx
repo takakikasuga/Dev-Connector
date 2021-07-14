@@ -1,11 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter, useHistory } from 'react-router-dom';
-import { createProfile } from '../../actions/profile';
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 
-const CreateProfile = () => {
+const EditProfile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const profile = useSelector((state) => state.profile.profile);
+  const loading = useSelector((state) => state.profile.loading);
   const [formData, setFormDate] = useState({
     company: '',
     website: '',
@@ -22,6 +24,28 @@ const CreateProfile = () => {
   });
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+  useEffect(() => {
+    dispatch(getCurrentProfile());
+
+    setFormDate({
+      company: loading || !profile.company ? '' : profile.company,
+      website: loading || !profile.website ? '' : profile.website,
+      location: loading || !profile.location ? '' : profile.location,
+      status: loading || !profile.status ? '' : profile.status,
+      skills: loading || !profile.skills ? '' : profile.skills.join(','),
+      githubusername:
+        loading || !profile.githubusername ? '' : profile.githubusername,
+      bio: loading || !profile.bio ? '' : profile.bio,
+      twitter: loading || !profile.social.twitter ? '' : profile.social.twitter,
+      facebook:
+        loading || !profile.social.facebook ? '' : profile.social.facebook,
+      linkedin:
+        loading || !profile.social.linkedin ? '' : profile.social.linkedin,
+      youtube: loading || !profile.social.youtube ? '' : profile.social.youtube,
+      instagram:
+        loading || !profile.social.instagram ? '' : profile.social.instagram
+    });
+  }, [loading]);
 
   const {
     company,
@@ -48,7 +72,7 @@ const CreateProfile = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log('history/withRouter', history);
-    dispatch(createProfile(formData, history));
+    dispatch(createProfile(formData, history, true));
   };
 
   return (
@@ -256,4 +280,4 @@ const CreateProfile = () => {
     </Fragment>
   );
 };
-export default CreateProfile;
+export default EditProfile;
