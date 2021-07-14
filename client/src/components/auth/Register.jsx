@@ -7,7 +7,6 @@ import { register } from '../../actions/auth';
 const Register = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const alert = useSelector((state) => state.alert);
   const [formData, setFormData] = useState({
     name: '',
     email: '',

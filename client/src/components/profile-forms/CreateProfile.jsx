@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, withRouter, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { createProfile } from '../../actions/profile';
 
 const CreateProfile = () => {

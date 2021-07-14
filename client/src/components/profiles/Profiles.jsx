@@ -10,7 +10,7 @@ const Profiles = () => {
   const profiles = useSelector((state) => state.profile.profiles);
   useEffect(() => {
     dispatch(getProfiles());
-  }, []);
+  }, [dispatch]);
   return (
     <Fragment>
       {loading ? (

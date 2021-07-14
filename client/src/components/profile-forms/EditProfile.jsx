@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, withRouter, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { createProfile, getCurrentProfile } from '../../actions/profile';
 
 const EditProfile = () => {
@@ -45,7 +45,7 @@ const EditProfile = () => {
       instagram:
         loading || !profile.social.instagram ? '' : profile.social.instagram
     });
-  }, [loading]);
+  }, [loading, dispatch]);
 
   const {
     company,

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Moment from 'react-moment';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { deleteExperience } from '../../actions/profile';
 
 const Experience = ({ experience }) => {
