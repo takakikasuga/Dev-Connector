@@ -2,10 +2,12 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CREAR_PROFILE,
-  ACCOUNT_DERETED
+  ACCOUNT_DERETED,
+  GET_REPOS
 } from './types';
 
 //  Get current users profile
@@ -15,6 +17,62 @@ export const getCurrentProfile = () => async (dispatch) => {
     console.log('getCurrentProfile/res.data', res.data);
     dispatch({
       type: GET_PROFILE,
+      payload: res.data
+    });
+  } catch (err) {
+    console.log('getCurrentProfile/err', err.response);
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//  Get all profile
+export const getProfiles = () => async (dispatch) => {
+  // 先に既存をプロファイルをからにする
+  dispatch({ type: CREAR_PROFILE });
+  try {
+    const res = await axios.get('/api/profile');
+    console.log('getProfiles/res.data', res.data);
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    });
+  } catch (err) {
+    console.log('getCurrentProfile/err', err.response);
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//  Get profile by ID
+export const getProfileById = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/user/${userId}`);
+    console.log('getProfileById/res.data', res.data);
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+  } catch (err) {
+    console.log('getCurrentProfile/err', err.response);
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//  Get Github repos
+export const getGithubRepos = (username) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/github/${username}`);
+    console.log('getGithubRepos/res.data', res.data);
+    dispatch({
+      type: GET_REPOS,
       payload: res.data
     });
   } catch (err) {
