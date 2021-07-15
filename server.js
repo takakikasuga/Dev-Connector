@@ -16,10 +16,6 @@ connectDB();
 // falseにすることでリクエストデータをreq.bodyで取得できるようになる。
 app.use(express.json({ extended: false }));
 
-// app.get('/', (req, res) => {
-//   res.send('API Running');
-// });
-
 // 各種のルート定義
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
