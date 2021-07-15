@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import Spinner from '../layout/Spiner';
 import PostItem from '../posts/PostItem';
 import CommentForm from '../post/CommentForm';
+import CommentItem from '../post/CommentItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPost } from '../../actions/post';
 import { Link, useParams } from 'react-router-dom';
@@ -25,6 +26,11 @@ const Post = () => {
       </Link>
       <PostItem post={post} showActions={false} />
       <CommentForm postId={post._id} />
+      <div className='comments'>
+        {post.comments.map((comment) => (
+          <CommentItem key={comment._id} comment={comment} postId={post._id} />
+        ))}
+      </div>
     </Fragment>
   );
 };
