@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
-import { addLike, removeLike } from '../../actions/post';
+import { addLike, removeLike, deletePost } from '../../actions/post';
 
 const PostItem = ({
   post: { _id, text, name, avatar, user, likes, comments, date }
@@ -46,7 +46,12 @@ const PostItem = ({
           )}
         </Link>
         {!auth.loading && user === auth.user._id && (
-          <button type='button' class='btn btn-danger'>
+          <button
+            onClick={() => {
+              dispatch(deletePost(_id));
+            }}
+            type='button'
+            class='btn btn-danger'>
             <i class='fas fa-times'></i>
           </button>
         )}
