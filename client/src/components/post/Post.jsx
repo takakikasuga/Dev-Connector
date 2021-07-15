@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import Spinner from '../layout/Spiner';
 import PostItem from '../posts/PostItem';
+import CommentForm from '../post/CommentForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPost } from '../../actions/post';
 import { Link, useParams } from 'react-router-dom';
@@ -23,6 +24,7 @@ const Post = () => {
         Back to Posts
       </Link>
       <PostItem post={post} showActions={false} />
+      <CommentForm postId={post._id} />
     </Fragment>
   );
 };
