@@ -2,6 +2,8 @@ import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import Spinner from '../layout/Spiner';
+import ProfileTop from './ProfileTop';
+import ProfileAbout from './ProfileAbout';
 import { getProfileById } from '../../actions/profile';
 
 const Profile = () => {
@@ -11,10 +13,10 @@ const Profile = () => {
   const profile = useSelector((state) => state.profile.profile);
   const loading = useSelector((state) => state.profile.loading);
   const auth = useSelector((state) => state.auth);
-
+  console.log('profile', profile);
   useEffect(() => {
     dispatch(getProfileById(id));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   return (
     <Fragment>
@@ -32,6 +34,10 @@ const Profile = () => {
                 Edit Profile
               </Link>
             )}
+          <div class='profile-grid my-1'>
+            <ProfileTop profile={profile} />
+            <ProfileAbout profile={profile} />
+          </div>
         </Fragment>
       )}
     </Fragment>
