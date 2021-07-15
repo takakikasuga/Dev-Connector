@@ -21,6 +21,8 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
   } catch (err) {
     console.log('getCurrentProfile/err', err.response);
+    // Add this
+    dispatch({ type: CREAR_PROFILE });
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }

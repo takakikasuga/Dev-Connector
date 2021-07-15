@@ -36,7 +36,8 @@ export default function (state = initialState, action) {
       return {
         ...state,
         error: payload,
-        loading: false
+        loading: false,
+        profile: null // Add this
       };
     case CREAR_PROFILE:
       console.log('CREAR_PROFILE処理が通過しています。');
